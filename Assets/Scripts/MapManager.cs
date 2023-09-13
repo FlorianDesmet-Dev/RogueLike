@@ -50,9 +50,6 @@ public class MapManager : MonoBehaviour
             y -= cellHeight + offsetPos;
         }
 
-        // Generate Rooms
-        int NB_ROOM = 20;
-
         // Create Start Room
         int row = Random.Range(0, ROWS - 1);
         int col = Random.Range(0, COLS - 1);
@@ -63,6 +60,9 @@ public class MapManager : MonoBehaviour
         Debug.Log("StartRoom[" + row + ", " + col + "]");
 
         roomList.Add(startRoom);
+
+        // Generate Rooms
+        int NB_ROOM = 20;
 
         while (roomList.Count < NB_ROOM)
         {
@@ -75,7 +75,8 @@ public class MapManager : MonoBehaviour
 
             int dir = Random.Range(0, 3);
 
-            if (dir == 0 && nRow > 0)
+            bool addRoom = false;
+            if (dir == 0 && nRow >= 0)
             {
                 newRoom = map[nRow - 1, nCol];
                 
@@ -83,7 +84,47 @@ public class MapManager : MonoBehaviour
                 {
                     room.GetComponent<Room>().upDoor = true;
                     newRoom.GetComponent<Room>().bottomDoor = true;
+                    addRoom = true;
                 }
+            }
+            else if(dir == 1 && nCol < COLS - 1)
+            {
+                newRoom = map[nRow, nCol + 1];
+
+                if (!newRoom.GetComponent<Room>().isOpen)
+                {
+                    room.GetComponent<Room>().rightDoor = true;
+                    newRoom.GetComponent<Room>().leftDoor = true;
+                    addRoom = true;
+                }
+            }
+            else if (dir == 2 && nRow < ROWS - 1)
+            {
+                newRoom = map[nRow + 1, nCol];
+
+                if (!newRoom.GetComponent<Room>().isOpen)
+                {
+                    room.GetComponent<Room>().bottomDoor = true;
+                    newRoom.GetComponent<Room>().upDoor = true;
+                    addRoom = true;
+                }
+            }
+            else if (dir == 3 && nCol >= 0)
+            {
+                newRoom = map[nRow, nCol - 1];
+
+                if (!newRoom.GetComponent<Room>().isOpen)
+                {
+                    room.GetComponent<Room>().leftDoor = true;
+                    newRoom.GetComponent<Room>().rightDoor = true;
+                    addRoom = true;
+                }
+            }
+
+            if (addRoom)
+            {
+                newRoom.GetComponent<Room>().isOpen = true;
+                roomList.Add(newRoom);
             }
         }
     }
