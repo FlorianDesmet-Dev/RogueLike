@@ -245,6 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   room: {fileID: 8914660215860879057, guid: d4daa1f5947c0994987fa416e14a8f64, type: 3}
+  roomList: []
 --- !u!4 &821394855
 Transform:
   m_ObjectHideFlags: 0

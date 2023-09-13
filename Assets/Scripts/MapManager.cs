@@ -16,15 +16,6 @@ public class MapManager : MonoBehaviour
         GenerateMap();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            PurgeMap();
-            GenerateMap();
-        }
-    }
-
     void GenerateMap()
     {
         map = new GameObject[ROWS, COLS];
@@ -56,13 +47,14 @@ public class MapManager : MonoBehaviour
 
         GameObject startRoom = map[row, col];
         startRoom.name = "Start room";
+        startRoom.GetComponent<Room>().isStartRoom = true;
         startRoom.GetComponent<Room>().isOpen = true;
         Debug.Log("StartRoom[" + row + ", " + col + "]");
 
         roomList.Add(startRoom);
 
         // Generate Rooms
-        int NB_ROOM = 20;
+        int NB_ROOM = 10;
 
         while (roomList.Count < NB_ROOM)
         {
@@ -76,7 +68,7 @@ public class MapManager : MonoBehaviour
             int dir = Random.Range(0, 3);
 
             bool addRoom = false;
-            if (dir == 0 && nRow >= 0)
+            if (dir == 0 && nRow > 0)
             {
                 newRoom = map[nRow - 1, nCol];
                 
@@ -109,7 +101,7 @@ public class MapManager : MonoBehaviour
                     addRoom = true;
                 }
             }
-            else if (dir == 3 && nCol >= 0)
+            else if (dir == 3 && nCol > 0)
             {
                 newRoom = map[nRow, nCol - 1];
 
